@@ -1,4 +1,6 @@
+brukva==0.0.1
 Django==2.1.4
 django-redis-sessions==0.6.1
 pytz==2018.7
 redis==3.0.1
+tornado==5.1.1

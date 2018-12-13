@@ -4,7 +4,7 @@ import json
 
 import redis
 
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 # from django.core.urlresolvers import reverse
@@ -27,7 +27,7 @@ def send_message_view(request):
     if not request.method == "POST":
         return HttpResponse("Please use POST.")
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse("Please sign in.")
 
     message_text = request.POST.get("message")
@@ -116,7 +116,7 @@ def messages_view(request):
     """
     для просмотра списка собеседников (с сортировкой по убыванию даты и времени последнего сообщения)
     """
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse("Please sign in.")
 
     threads = Thread.objects.filter(
@@ -124,9 +124,7 @@ def messages_view(request):
     ).order_by("-last_message")
 
     if not threads:
-        return render_to_response('private_messages.html',
-                                  {},
-                                  context_instance=RequestContext(request))
+        return render(request, 'private_messages.html')
 
     r = redis.StrictRedis()
 
@@ -140,11 +138,7 @@ def messages_view(request):
             "total_messages"
         )
 
-    return render_to_response('private_messages.html',
-                              {
-                                  "threads": threads,
-                              },
-                              context_instance=RequestContext(request))
+    return render(request, 'private_messages.html', {"threads": threads})
 
 
 def chat_view(request, thread_id):
@@ -154,7 +148,7 @@ def chat_view(request, thread_id):
     Tornado-серверу через WS и получать/отправлять новые сообщения в
     реальном времени, без перезагрузки страницы и без дополнительных HTTP-запросов)
     """
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse("Please sign in.")
 
     thread = get_object_or_404(
@@ -197,13 +191,12 @@ def chat_view(request, thread_id):
     if tz:
         timezone.activate(tz)
 
-    return render_to_response('chat.html',
-                              {
-                                  "thread_id": thread_id,
-                                  "thread_messages": messages,
-                                  "messages_total": messages_total,
-                                  "messages_sent": messages_sent,
-                                  "messages_received": messages_received,
-                                  "partner": partner,
-                              },
-                              context_instance=RequestContext(request))
+    context = {
+        "thread_id": thread_id,
+        "thread_messages": messages,
+        "messages_total": messages_total,
+        "messages_sent": messages_sent,
+        "messages_received": messages_received,
+        "partner": partner,
+    }
+    return render(request, 'chat.html', context)

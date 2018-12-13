@@ -2,15 +2,17 @@ import datetime
 import json
 import time
 import urllib
+from importlib import import_module
 
-import brukva
+# import asyncio
+# import brukva
 import tornado.web
 import tornado.websocket
 import tornado.ioloop
 import tornado.httpclient
 
 from django.conf import settings
-from django.utils.importlib import import_module
+# from django.utils.importlib import import_module
 
 session_engine = import_module(settings.SESSION_ENGINE)
 
@@ -18,8 +20,10 @@ from django.contrib.auth.models import User
 
 from privatemessages.models import Thread
 
-c = brukva.Client()
-c.connect()
+# loop = asyncio.get_event_loop()
+# todo: need chenge brukva, & don't work authorization
+# c = brukva.Client()
+# c.connect()
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -31,8 +35,9 @@ class MainHandler(tornado.web.RequestHandler):
 class MessagesHandler(tornado.websocket.WebSocketHandler):
     def __init__(self, *args, **kwargs):
         super(MessagesHandler, self).__init__(*args, **kwargs)
-        self.client = brukva.Client()
-        self.client.connect()
+        # todo: need chenge brukva
+        # self.client = brukva.Client()
+        # self.client.connect()
 
     def open(self, thread_id):
         session_key = self.get_cookie(settings.SESSION_COOKIE_NAME)
@@ -50,9 +55,11 @@ class MessagesHandler(tornado.websocket.WebSocketHandler):
             self.close()
             return
         self.channel = "".join(['thread_', thread_id, '_messages'])
-        self.client.subscribe(self.channel)
+        # todo: need chenge brukva
+        # self.client.subscribe(self.channel)
         self.thread_id = thread_id
-        self.client.listen(self.show_new_message)
+        # todo: need chenge brukva
+        # self.client.listen(self.show_new_message)
 
     def handle_request(self, response):
         pass
@@ -62,11 +69,12 @@ class MessagesHandler(tornado.websocket.WebSocketHandler):
             return
         if len(message) > 10000:
             return
-        c.publish(self.channel, json.dumps({
-            "timestamp": int(time.time()),
-            "sender": self.sender_name,
-            "text": message,
-        }))
+        # todo: need chenge brukva
+        # c.publish(self.channel, json.dumps({
+        #     "timestamp": int(time.time()),
+        #     "sender": self.sender_name,
+        #     "text": message,
+        # }))
         http_client = tornado.httpclient.AsyncHTTPClient()
         request = tornado.httpclient.HTTPRequest(
             "".join([
