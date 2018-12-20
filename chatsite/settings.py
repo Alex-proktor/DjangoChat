@@ -125,6 +125,9 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, "../privatemessages/templates"),
 )
 
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/'
+
 try:
     from local_settings import *
 except ImportError:

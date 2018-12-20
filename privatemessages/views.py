@@ -119,6 +119,7 @@ def messages_view(request):
     if not request.user.is_authenticated:
         return HttpResponse("Please sign in.")
 
+    # todo: fix threads
     threads = Thread.objects.filter(
         participants=request.user
     ).order_by("-last_message")
