@@ -39,3 +39,9 @@ login/logout accounts
 http://127.0.0.1:8000/accounts/login/
 http://127.0.0.1:8000/accounts/logout/
 ```
+
+todo:
+
+fix error: 
+```
+redis.exceptions.ConnectionError: Error 10061 connecting to localhost:6379. Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение.```

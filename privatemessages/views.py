@@ -120,6 +120,8 @@ def messages_view(request):
         return HttpResponse("Please sign in.")
 
     # todo: fix threads
+    # threads = Thread.objects.all()
+    #
     threads = Thread.objects.filter(
         participants=request.user
     ).order_by("-last_message")

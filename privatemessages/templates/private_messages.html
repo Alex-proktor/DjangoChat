@@ -5,13 +5,13 @@
 <div class="private_messages">
     <h1>Собеседники</h1>
     <div class="partners">
-    {% for thread in threads %}
-        <p>
-            <a href="{% url 'chat_view' thread.id %}">{{ thread.partner.username }} ({{ thread.total_messages|default_if_none:"0" }} {{ thread.total_messages|rupluralize:"сообщение,сообщения,сообщений" }})</a>
-        </p>
-    {% empty %}
-        <p>Пока что собеседников нет.</p>
-    {% endfor %}
+{#    {% for thread in threads %}#}
+{#        <p>#}
+{#            <a href="{% url 'chat_view' thread.id %}">{{ thread.partner.username }} ({{ thread.total_messages|default_if_none:"0" }} {{ thread.total_messages|rupluralize:"сообщение,сообщения,сообщений" }})</a>#}
+{#        </p>#}
+{#    {% empty %}#}
+{#        <p>Пока что собеседников нет.</p>#}
+{#    {% endfor %}#}
     </div>
     <h1>Отправить сообщение</h1>
     <form action="{% url 'send_message_view' %}" method="post" class="new_message">
