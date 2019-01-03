@@ -68,7 +68,7 @@ def send_message_view(request):
     )
 
     return HttpResponseRedirect(
-        reverse('privatemessages.views.messages_view')
+        reverse('messages_view')
     )
 
 

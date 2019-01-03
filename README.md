@@ -1,28 +1,38 @@
 # DjangoChat
-Simple chat
+Simple chat with tornado and redis.
 
 Use Python 3.6
 
 I create with this - https://habr.com/post/160123/
 https://developer.mozilla.org/ru/docs/Learn/Server-side/Django/%D0%90%D1%83%D1%82%D0%B5%D0%BD%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F
 
+install redis:
+```
+sudo apt update
+sudo apt upgrade
+sudo apt install redis-server
+```
+
+test install redis
+```
+sudo redis-cli ping
+```
+In case of successful installation, the text will come back - PONG
+
+
+
 install python packages:
+
 ```
 pip install -r req.txt
 ```
 
+```
 python manage.py migrate
 
 python manage.py makemigrations privatemessages
+```
 
-Chenge in "venv/Lib/site-packages/brukva/client.py"
-```
-except Exception, e:
-```
-on 
-```
-except Exception as e:
-```
 
 ```
 python manage.py createsuperuser
@@ -40,8 +50,3 @@ http://127.0.0.1:8000/accounts/login/
 http://127.0.0.1:8000/accounts/logout/
 ```
 
-todo:
-
-fix error: 
-```
-redis.exceptions.ConnectionError: Error 10061 connecting to localhost:6379. Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение.```
