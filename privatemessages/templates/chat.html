@@ -19,24 +19,44 @@ $(document).ready(function() {
 <div class="chat">
     <div class="partner">
         <p class="name">{{ partner.username }}</p>
-        <p class="messages"><span class="total">{{ messages_total }}</span> {{ messages_total|rupluralize:"сообщение,сообщения,сообщений" }} (<span class="received">{{ messages_received }}</span> получено, <span class="sent">{{ messages_sent }}</span> отправлено)</p>
+        <p class="messages">
+            <span class="total">{{ messages_total }}</span>
+            {{ messages_total|rupluralize:"сообщение,сообщения,сообщений" }} (
+            <span class="received">{{ messages_received }}</span>
+            получено,
+            <span class="sent">{{ messages_sent }}</span>
+            отправлено)
+        </p>
     </div>
     <div class="conversation">
         {% for message in thread_messages reversed %}
         <div class="message"> 
-            {% if message.sender == user %}<p class="author we"><span class="datetime">{{ message.datetime|date:"d.m.Y H:i:s" }}</span> {{ user.username }}:</p>{% else %}<p class="author partner"><span class="datetime">{{ message.datetime|date:"d.m.Y H:i:s" }}</span> {{ partner.username }}:</p>{% endif %}
+            {% if message.sender == user %}
+                <p class="author we">
+                    <span class="datetime">{{ message.datetime|date:"d.m.Y H:i:s" }}</span>
+                    {{ user.username }}:
+                </p>
+            {% else %}
+                <p class="author partner">
+                    <span class="datetime">{{ message.datetime|date:"d.m.Y H:i:s" }}</span>
+                    {{ partner.username }}:
+                </p>
+            {% endif %}
             <p class="message">{{ message.text|linebreaksbr }}</p>
         </div>
         {% endfor %}
     </div>
-    <form class="message_form">
+    <form action="{% url 'send_message_view' %}" method="post" class="message_form">
+        {% csrf_token %}
+        <p class="name">
+            <input type="hidden" name="recipient_name" placeholder="Имя получателя" value="{{ partner.username }}">
+        </p>
         <div class="compose">
-            <textarea rows="1" cols="30" id="message_textarea"></textarea>
+            <textarea name="message" rows="1" cols="30" id="message_textarea"></textarea>
         </div>
-        <div class="send">
-            <button class="btn" type="button">Отправить</button>
-            <p>Вы также можете отправлять сообщения с помощью клавиш Ctrl + Enter.</p>
-        </div>
+        <p>
+            <input type="submit" value="Отправить">
+        </p>
     </form>
 </div>
 {% endblock content %}
