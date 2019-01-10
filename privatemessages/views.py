@@ -4,10 +4,8 @@ import json
 
 import redis
 
-from django.shortcuts import render_to_response, get_object_or_404, render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
-from django.template import RequestContext
-# from django.core.urlresolvers import reverse
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -15,7 +13,7 @@ from django.conf import settings
 
 from django.contrib.auth.models import User
 
-from privatemessages.models import Thread, Message
+from privatemessages.models import Thread
 
 from privatemessages.utils import json_response, send_message
 
@@ -68,7 +66,7 @@ def send_message_view(request):
     )
 
     return HttpResponseRedirect(
-        reverse('privatemessages.views.messages_view')
+        reverse('messages_view')
     )
 
 
@@ -119,9 +117,6 @@ def messages_view(request):
     if not request.user.is_authenticated:
         return HttpResponse("Please sign in.")
 
-    # todo: fix threads
-    # threads = Thread.objects.all()
-    #
     threads = Thread.objects.filter(
         participants=request.user
     ).order_by("-last_message")
@@ -130,8 +125,6 @@ def messages_view(request):
         return render(request, 'private_messages.html')
 
     r = redis.StrictRedis()
-
-    user_id = str(request.user.id)
 
     for thread in threads:
         thread.partner = thread.participants.exclude(id=request.user.id)[0]
