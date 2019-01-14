@@ -3,6 +3,7 @@
 import json
 
 import redis
+from django.contrib.auth.decorators import login_required
 
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -18,6 +19,7 @@ from privatemessages.models import Thread
 from privatemessages.utils import json_response, send_message
 
 
+@login_required(login_url='/accounts/login/')
 def send_message_view(request):
     """
     для отправки сообщения через Django (например, если это первое сообщение между двумя людьми)
@@ -71,6 +73,7 @@ def send_message_view(request):
 
 
 @csrf_exempt
+@login_required(login_url='/accounts/login/')
 def send_message_api_view(request, thread_id):
     """
     для отправки сообщений через Tornado
@@ -110,6 +113,7 @@ def send_message_api_view(request, thread_id):
     return json_response({"status": "ok"})
 
 
+@login_required(login_url='/accounts/login/')
 def messages_view(request):
     """
     для просмотра списка собеседников (с сортировкой по убыванию даты и времени последнего сообщения)
@@ -137,6 +141,7 @@ def messages_view(request):
     return render(request, 'private_messages.html', {"threads": threads})
 
 
+@login_required(login_url='/accounts/login/')
 def chat_view(request, thread_id):
     """
     для чата (Django будет просто возвращать страницу с теми сообщениями,

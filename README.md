@@ -35,6 +35,14 @@ python manage.py makemigrations privatemessages
 python manage.py createsuperuser
 ```
 
+Install  Redis for Windows
+```
+Download the latest Redis.msi file from
+https://github.com/MSOpenTech/redis/releases
+after installation. The redis service is installed, we can use it from the Service manager
+```
+
+
 Start server:
 ```
 python manage.py runserver
