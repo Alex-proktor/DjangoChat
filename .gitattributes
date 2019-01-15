@@ -1,1 +1,2 @@
 templatetags/static/* linguist-vendored
+jstz.js linguist-vendored=false
